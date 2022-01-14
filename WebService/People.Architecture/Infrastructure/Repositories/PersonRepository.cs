@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace People.Architecture.Infrastructure.Repositories
 {
-    [ExcludeFromCodeCoverage]
     public class PersonRepository : IPersonRepository
     {
         private readonly PeopleDbContext _context;
@@ -46,7 +45,7 @@ namespace People.Architecture.Infrastructure.Repositories
             {
                 query = query.Where(x => EF.Functions.Like(x.Nom, $"%{nomFilter}%"));
             }
-            if (nomFilter != "")
+            if (prenomFilter != "")
             {
                 query = query.Where(x => EF.Functions.Like(x.Prenom, $"%{prenomFilter}%"));
             }

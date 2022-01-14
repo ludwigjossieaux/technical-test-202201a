@@ -17,5 +17,26 @@ namespace People.Architecture.Infrastructure.Persistence
         }
 
         public DbSet<Person> People { get; set; }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var elem in ChangeTracker.Entries())
+            {
+                if (elem.Entity is EntityBase entity)
+                {
+                    switch (elem.State)
+                    {
+                        case EntityState.Added:
+                            entity.CreatedDate = DateTime.UtcNow;
+                            entity.LastModifiedDate = DateTime.UtcNow;
+                            break;
+                        case EntityState.Modified:
+                            entity.LastModifiedDate = DateTime.UtcNow;
+                            break;
+                    }
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
+        }
     }
 }
